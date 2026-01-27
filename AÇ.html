@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💖</title>
+
+<style>
+body {
+    margin: 0;
+    background: radial-gradient(circle, #300 0%, #000 70%);
+    color: white;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#container {
+    max-width: 390px;
+    height: 100vh;
+    margin: auto;
+    position: relative;
+}
+
+#window {
+    background: #111;
+    border-radius: 16px;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 0 35px crimson;
+    animation: pulse 2s infinite;
+    width: 90%;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 10px crimson; }
+    50% { box-shadow: 0 0 35px red; }
+    100% { box-shadow: 0 0 10px crimson; }
+}
+
+#text {
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+#counter {
+    font-size: 13px;
+    color: #f88;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#yes {
+    background: crimson;
+    color: white;
+}
+
+#no {
+    background: gray;
+    color: white;
+    position: absolute;
+}
+
+#share {
+    margin-top: 10px;
+    background: #444;
+    color: white;
+}
+
+.heart {
+    position: absolute;
+    color: red;
+    animation: float 2s linear forwards;
+}
+
+@keyframes float {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-140px); }
+}
+</style>
+</head>
+
+<body>
+<div id="container">
+    <div id="window">
+        <div id="text">Benimle çıkar mısın? 💖</div>
+        <div id="counter">Hayır deme denemesi: 0</div>
+
+        <button id="yes">Evet</button>
+        <button id="no">Hayır</button>
+        <br>
+        <button id="share">Paylaş 🔁</button>
+    </div>
+</div>
+
+<!-- SESLER -->
+<audio id="heartbeat" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_9b0b8b4e5a.mp3">
+</audio>
+
+<audio id="whisper" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_52a6c6fa3c.mp3">
+</audio>
+
+<script>
+const texts = [
+    "Biraz düşünmek ister misin? 🙂",
+    "Kalbim hızlandı galiba… 💓",
+    "Bu soruya hemen hayır denmez 😏",
+    "Beni gerçekten görmezden mi geliyorsun?",
+    "Bak… bu iş ciddileşiyor 👁️"
+];
+
+let index = 0;
+let noCount = 0;
+
+const noBtn = document.getElementById("no");
+const text = document.getElementById("text");
+const counter = document.getElementById("counter");
+const win = document.getElementById("window");
+
+const heartbeat = document.getElementById("heartbeat");
+const whisper = document.getElementById("whisper");
+
+/* Sesler ilk etkileşimde başlar */
+document.body.addEventListener("click", () => {
+    heartbeat.volume = 0.5;
+    whisper.volume = 0.15;
+    heartbeat.play();
+    whisper.play();
+}, { once: true });
+
+noBtn.onmouseover = noBtn.ontouchstart = () => {
+    noBtn.style.left = Math.random() * 200 + "px";
+    noBtn.style.top = Math.random() * 80 + "px";
+
+    noCount++;
+    counter.innerText = "Hayır deme denemesi: " + noCount;
+
+    heartbeat.playbackRate = Math.min(1 + noCount * 0.1, 2.5);
+
+    if (navigator.vibrate) navigator.vibrate(120);
+
+    if (noCount >= 10) {
+        text.innerText = "Artık kaçamazsın 👁️";
+    } else {
+        text.innerText = texts[index % texts.length];
+        index++;
+    }
+
+    win.style.transform =
+        "translate(-50%, -50%) rotate(" + (Math.random()*4-2) + "deg)";
+    setTimeout(() => {
+        win.style.transform = "translate(-50%, -50%)";
+    }, 100);
+};
+
+/* ===== EVET + İSME GÖRE GİZLİ MESAJLAR ===== */
+document.getElementById("yes").onclick = () => {
+    const input = prompt("Adını söyle… 💖");
+    const name = input ? input.trim() : "";
+    const key = name.toLowerCase();
+
+    let secret = "Kalbim artık senin. Bu cevabı bekliyordum.";
+
+    if (key === "eslem") {
+        secret = "Eslem… bu ihtimali en başından beri hesaplamıştım.";
+    } else if (key === "elif") {
+        secret = "Elif… seni düşündüğümden daha uzun zamandır buradayım.";
+    } else if (key === "ayşe") {
+        secret = "Ayşe… bazı cevaplar sessizce gelir.";
+    } else if (key === "ali") {
+        secret = "Ali… bu kadar direnmeyeceğini biliyordum.";
+    }
+
+    text.innerText = name
+        ? `💘 ${name}, ${secret}`
+        : `💘 ${secret}`;
+
+    explodeHearts();
+};
+
+/* Kalp patlaması */
+function explodeHearts() {
+    for (let i = 0; i < 50; i++) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerText = "❤";
+        h.style.left = Math.random() * window.innerWidth + "px";
+        h.style.top = window.innerHeight + "px";
+        h.style.fontSize = (18 + Math.random() * 26) + "px";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 2000);
+    }
+}
+
+/* Paylaş + replay */
+document.getElementById("share").onclick = async () => {
+    if (navigator.share) {
+        await navigator.share({
+            title: "💖",
+            text: "Buna bir bak…",
+            url: location.href
+        });
+    }
+    location.reload();
+};
+</script>
+
+</body>
+</html>
