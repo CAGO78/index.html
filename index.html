@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Azra ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #ff6b81, #000014);
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#overlayIntro {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 20;
+    text-align: center;
+}
+
+#overlayIntro h1 {
+    font-size: 28px;
+    opacity: 0.9;
+}
+
+.tapText {
+    margin-top: 20px;
+    opacity: 0.6;
+    animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+    0%,100%{opacity:0.3}
+    50%{opacity:1}
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 15px 60px rgba(255,0,90,0.4);
+    max-width: 420px;
+}
+
+.initials {
+    font-size: 42px;
+    letter-spacing: 6px;
+}
+
+button {
+    margin-top: 18px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    background: white;
+    color: #ff4d6d;
+    font-weight: bold;
+}
+
+#surprise {
+    margin-top: 18px;
+    display: none;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.burst {
+    position: absolute;
+    font-size: 26px;
+    animation: burst 1.3s ease-out forwards;
+}
+
+@keyframes burst {
+    0% { transform: scale(0.6); opacity: 1; }
+    100% { transform: scale(4.5) translate(var(--x), var(--y)); opacity: 0; }
+}
+
+.touchHeart {
+    position: absolute;
+    pointer-events: none;
+    animation: pop 0.8s forwards;
+}
+
+@keyframes pop {
+    0%{transform:scale(0);opacity:1}
+    100%{transform:scale(2) translateY(-30px);opacity:0}
+}
+
+#loveRain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+.falling {
+    position: absolute;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to { transform: translateY(110vh); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Giriş sinematik ekran -->
+<div id="overlayIntro" onclick="startLove()">
+    <h1>Bu sayfa birine ait...
+    <br><br>Azra'ya ❤️</h1>
+    <div class="tapText">Dokun...</div>
+</div>
+
+<!-- Müzik (dokununca başlar, mobil uyumlu) -->
+<iframe id="music" width="0" height="0"
+    src="https://www.youtube.com/embed/m8QQR-wQA0I?start=45&autoplay=0&loop=1&playlist=m8QQR-wQA0I"
+    frameborder="0" allow="autoplay"></iframe>
+
+<div id="loveRain"></div>
+
+<div class="container">
+    <div class="card">
+        <div class="initials">A ❤️ Ç</div>
+        <p>Kalbimin en güzel yerinde sen varsın...</p>
+        <button onclick="showSurprise()">Kalbimi Aç 💌</button>
+        <div id="surprise">
+            Sen benim en güzel tesadüfümsün.
+            <br><br>
+            Gülüşün huzurum,
+            varlığın mutluluğum oldu.
+            <br><br>
+            Belki dünya büyük...
+            ama benim dünyam sensin.
+            <br><br>
+            Seni çok seviyorum Azra ❤️
+        </div>
+    </div>
+</div>
+
+<script>
+// --- Giriş başlat ---
+function startLove() {
+    document.getElementById('overlayIntro').style.display = 'none';
+
+    // Müziği başlat
+    const iframe = document.getElementById('music');
+    iframe.src = iframe.src.replace('autoplay=0', 'autoplay=1');
+
+    epicBurst();
+    startLoveRain();
+}
+
+// --- Epik patlama ---
+function epicBurst() {
+    for (let i = 0; i < 160; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'burst';
+        heart.innerHTML = '💖';
+        heart.style.left = window.innerWidth/2 + 'px';
+        heart.style.top = window.innerHeight/2 + 'px';
+        heart.style.setProperty('--x', (Math.random()*800 - 400) + 'px');
+        heart.style.setProperty('--y', (Math.random()*700 - 350) + 'px');
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(), 1300);
+    }
+
+    if (navigator.vibrate) navigator.vibrate([300,100,300]);
+}
+
+// --- Mesaj açılınca mega efekt ---
+function showSurprise() {
+    document.getElementById('surprise').style.display = 'block';
+    epicBurst();
+}
+
+// --- Dokununca kalp çıkması ---
+document.addEventListener('touchstart', spawnTouchHeart);
+document.addEventListener('click', spawnTouchHeart);
+
+function spawnTouchHeart(e) {
+    const heart = document.createElement('div');
+    heart.className = 'touchHeart';
+    heart.innerHTML = '💗';
+    heart.style.left = (e.clientX || e.touches?.[0].clientX) + 'px';
+    heart.style.top = (e.clientY || e.touches?.[0].clientY) + 'px';
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(), 800);
+}
+
+// --- Kalp yağmuru ---
+function startLoveRain() {
+    setInterval(() => {
+        const rain = document.createElement('div');
+        rain.className = 'falling';
+        rain.innerHTML = ['💖','💘','💝','💗'][Math.floor(Math.random()*4)];
+        rain.style.left = Math.random()*100 + 'vw';
+        rain.style.top = '-20px';
+        rain.style.fontSize = (Math.random()*20+18)+'px';
+        rain.style.animationDuration = (Math.random()*3+3)+'s';
+        document.getElementById('loveRain').appendChild(rain);
+        setTimeout(()=>rain.remove(), 6000);
+    }, 200);
+}
+</script>
+
+</body>
+</html>
